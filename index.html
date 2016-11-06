@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zine</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" type="text/css" src="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+        <style>
+        body {
+            margin: 0;   
+        }
+        </style>
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
+        <script src="main.js"></script>
+        <script>
+            require(["d3", "jquery"], function () {
+                Main.prepare();
+                for (i=0;i!=10;i++) {
+                    a = Math.floor(Math.random()*20)
+                    Main.regist_zine(a,Math.floor(Math.random()*a));
+                }
+                Main.export_to_stl();
+            });
+        </script>
+    </body>
+</html>
