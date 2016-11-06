@@ -53,11 +53,11 @@ require(["d3", "jquery"], function(d3) {
         
         Main.x = d3.scale.linear()
             .domain([-1, 1])
-            .range([400, 600]);
+            .range([$(window).width()/2-100, $(window).width()/2+100]);
         
         Main.y = d3.scale.linear()
             .domain([-1, 1])
-            .range([400, 600]);
+            .range([$(window).height()/2-100, $(window).height()/2+100]);
         
         Main.line = d3.svg.line()
             .x(function(d) { return Main.x(d.pos[0]); })
