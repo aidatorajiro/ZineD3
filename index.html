@@ -10,6 +10,27 @@
         body {
             margin: 0;   
         }
+        #inputs {
+            position: absolute;
+            margin: 0px;
+            padding: 1em;
+            color: #FFFFFF;
+            top: 0px;
+            left: 0px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 3em;
+        }
+        .zine_input {
+            outline: 0;
+            background: #000000;
+            border: 1px #FFFFFF solid;
+            color: #FFFFFF;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 3px;
+            font-size:16px;
+            width: 50px;
+            margin: 0px;
+        }
         </style>
     </head>
     <body>
@@ -18,12 +39,39 @@
         <script>
             require(["d3", "jquery"], function () {
                 Main.prepare();
-                for (i=0;i!=10;i++) {
-                    a = Math.floor(Math.random()*20)
-                    Main.regist_zine(a,Math.floor(Math.random()*a));
+                for (var i=0;i!=10;i++) {
+                    var a = Math.floor(Math.random()*19) + 1
+                    var b = Math.floor(Math.random()*(a-1)) + 1
+                    var j = Main.regist_zine(a,b);
+                    
+                    var elm1 = $('<input type="number" class="zine_input"/>').val(a);
+                    (function (j, elm1, elm2) {
+                        elm1.change(function () {
+                            $(this).val(Math.floor($(this).val()));
+                            if (Number($(this).val()) < 0) {
+                                $(this).val(1)
+                            }
+                            Main.change_zine(j, Number($(this).val()), Main.registed_zine[j][1]);
+                        });
+                    })(j, elm1, elm2)
+                    
+                    var elm2 = $('<input type="number" class="zine_input"/>').val(b);
+                    (function (j, elm1, elm2) {
+                        elm2.change(function () {
+                            $(this).val(Math.floor($(this).val()));
+                            if (Number($(this).val()) < 0) {
+                                $(this).val(1)
+                            }
+                            Main.change_zine(j, Main.registed_zine[j][0], Number($(this).val()));
+                        });
+                    })(j, elm1, elm2)
+                    
+                    $("#inputs").append("Z(").append(elm1).append(", ").append(elm2).append(")<br>");
                 }
                 Main.export_to_stl();
             });
         </script>
+        <div id="inputs">
+        </div>
     </body>
 </html>

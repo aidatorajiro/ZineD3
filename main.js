@@ -120,12 +120,46 @@ require(["d3", "jquery"], function(d3) {
             .attr("r", Main.point_radius)
             .attr("class", "zine_circle")
             .style("fill", "#4DB4D6");
+        
+        return group
+    }
+    
+    Main.redraw_zine = function(group, a, b) {
+        group.data($.map(Main.zine_all(a,b), function(d){
+            return [$.map(d, function (d) {
+                return {pos: d};
+            })];
+        }));
+        
+        group.select("path").attr('d', Main.plot_line);
+        
+        circle = group.selectAll("circle")
+            .data(function(d){return d;})
+        
+        circle.enter()
+            .append("circle")
+            .attr("transform", Main.plot_circle)
+            .attr("r", Main.point_radius)
+            .attr("class", "zine_circle")
+            .style("fill", "#4DB4D6");
+        
+        circle.exit().remove();
+        
+        group.exit().remove();
+        
+        Main.zoom();
+        
+        return group
     }
     
     Main.registed_zine = [];
     Main.regist_zine = function (a,b) {
-        Main.draw_zine(Main.svg, a, b)
-        Main.registed_zine.push([a,b]);
+        Main.registed_zine.push([a,b,Main.draw_zine(Main.svg, a, b)]);
+        return Main.registed_zine.length - 1;
+    }
+    Main.change_zine = function (i,a,b) {
+        Main.registed_zine[i] = [a, b, Main.redraw_zine(Main.registed_zine[i][2], a, b)]
+        return i;
     }
     Main.export_to_stl = function () {
         var stlname = $.map(Main.registed_zine,function(a){return a.join("_")}).join("__")
