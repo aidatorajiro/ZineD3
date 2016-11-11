@@ -90,68 +90,55 @@ require(["d3", "jquery"], function(d3) {
         });
     }
     
-    Main.draw_zine = function(svg, a, b) {
-    
-        // Wrapperを作る
-        var group = Main.svg
-            .append("g")
-            .data($.map(Main.zine_all(a,b), function(d){
-                return [$.map(d, function (d) {
-                    return {pos: d};
-                })];
-            }));
-    
+    // 描画関係
+    // do_draw: 線と点を描画する
+    Main.do_draw = function (obj) {
+        // 内容物を消去
+        obj.selectAll("*").remove();
+        
+        // 描画する線の本数に応じてグループを作る
+        groups = obj.selectAll("g").data(obj.datum()).enter().append("g");
+        
         // 線を描画
-        group
-            .append("path")
+        groups.append("path").data(function(d){return d;})
             .attr('stroke', 'white')
             .attr('stroke-width', '1.5')
             .attr('fill', 'transparent')
             .attr('d', Main.plot_line)
             .attr("class", "zine_line");
-    
-        // 円を描画
-        group
-            .selectAll("circle")
-            .data(function(d){return d;})
-            .enter()
+        
+        // 点を描画
+        groups.selectAll("circle").data(function(d){return d;}).enter()
             .append("circle")
             .attr("transform", Main.plot_circle)
             .attr("r", Main.point_radius)
             .attr("class", "zine_circle")
             .style("fill", "#4DB4D6");
-        
-        return group
     }
     
-    Main.redraw_zine = function(group, a, b) {
-        group.data($.map(Main.zine_all(a,b), function(d){
+    // draw_zine: 陣を描画する（svgを渡す）
+    Main.draw_zine = function (svg, a, b) {
+        var data = $.map(Main.zine_all(a,b), function(d){
             return [$.map(d, function (d) {
                 return {pos: d};
             })];
-        }));
+        });
         
-        group.select("path").attr('d', Main.plot_line);
-        
-        circle = group.selectAll("circle")
-            .data(function(d){return d;})
-        
-        circle.enter()
-            .append("circle")
-            .attr("transform", Main.plot_circle)
-            .attr("r", Main.point_radius)
-            .attr("class", "zine_circle")
-            .style("fill", "#4DB4D6");
-        
-        circle.exit().remove();
-        
-        group.exit().remove();
-        
-        Main.zoom();
-        
-        return group
+        return svg.append("g").data([data]).call(Main.do_draw);
     }
     
+    // draw_zine: 陣を再描画する（svgの中のgroupを渡す）
+    Main.redraw_zine = function (group, a, b) {
+        var data = $.map(Main.zine_all(a,b), function(d){
+            return [$.map(d, function (d) {
+                return {pos: d};
+            })];
+        });
+        
+        return group.data([data]).call(Main.do_draw);
+    }
+    
+    // 登録関係
     Main.registed_zine = [];
     Main.regist_zine = function (a,b) {
         Main.registed_zine.push([a,b,Main.draw_zine(Main.svg, a, b)]);
