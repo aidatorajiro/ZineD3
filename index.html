@@ -48,7 +48,7 @@
                     (function (j, elm1, elm2) {
                         elm1.change(function () {
                             $(this).val(Math.floor($(this).val()));
-                            if (Number($(this).val()) < 0) {
+                            if (Number($(this).val()) < 1) {
                                 $(this).val(1)
                             }
                             Main.change_zine(j, Number($(this).val()), Main.registed_zine[j][1]);
@@ -59,7 +59,7 @@
                     (function (j, elm1, elm2) {
                         elm2.change(function () {
                             $(this).val(Math.floor($(this).val()));
-                            if (Number($(this).val()) < 0) {
+                            if (Number($(this).val()) < 1) {
                                 $(this).val(1)
                             }
                             Main.change_zine(j, Main.registed_zine[j][0], Number($(this).val()));
