@@ -16,8 +16,8 @@
 
 require.config({
   paths: {
-    d3: "http://d3js.org/d3.v3.min",
-    jquery: "http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min"
+    d3: "https://d3js.org/d3.v3.min",
+    jquery: "https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min"
   }
 });
 
